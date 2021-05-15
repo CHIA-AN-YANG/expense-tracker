@@ -22,8 +22,17 @@ require('./config/mongoose')
 
 app.locals.categoryMain = categoryArr;
 
+
+//提供網頁訊息的 middleware
+app.use(function(req, res, next) {
+  const d1 = new Date().toLocaleString({year: 'numeric', month: 'short', day: 'numeric'})
+  console.log(`method: ${req.method} | router: ${req.url} | time: ${d1}`)
+  next()
+})
+
 const routes = require('./routes')
 app.use(routes)
+
 
 app.listen(PORT, () => {
   console.log(`App is running on port ${PORT}`)

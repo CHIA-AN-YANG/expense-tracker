@@ -34,8 +34,10 @@ router.get('/:id/edit', (req, res) => {
     record => {
       //dd-mm-yyyy => yyyy-mm-dd
       const dateSet = record.date
-      const categoryArr2 = arrRemove(categoryArr, record.category)
-      res.render('edit', { today:dateSet, record, category:categoryArr2});
+      let categoryArr2 = []
+      for(i=0;i<categoryArr.length;i++){categoryArr2.push(categoryArr[i])}
+      const categoryArr3 = arrRemove(categoryArr2, record.category)
+      res.render('edit', { today:dateSet, record, categoryEdit:categoryArr3});
     }
   )
   
