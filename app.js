@@ -25,6 +25,6 @@ app.locals.categoryMain = categoryArr;
 const routes = require('./routes')
 app.use(routes)
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
   console.log(`App is running on port ${PORT}`)
 })
