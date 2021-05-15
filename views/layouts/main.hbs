@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>老爸私房錢</title>
+
+{{!-- favicon --}}
+  <link rel="favicon" href="/images/favicon-money-check.svg" type="image/x-icon">
+  <link rel="shortcut icon" href="/images/favicon-money-check.svg" type="image/x-icon">
+  
+{{!-- bootstrap with js & jQuery --}}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" 
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js" 
+        integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" 
+        crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" 
+          integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous">
+          </script>
+
+{{!-- fontawesome (old version) --}}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+{{!-- import font: Anonymous Pro --}}
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/stylesheets/style.css">
+
+</head>
+
+<body>
+  
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <div class="container-sm">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+
+        <a class="navbar-brand" href="/">家庭記帳本</a>
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+          <li class="nav-item active">
+            <a class="nav-link nav-link--home" href="/">Home<span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link nav-link--add" href="/records/new">Add Record</a>
+          </li>
+        </ul>
+
+        <form class="form-inline my-2 my-lg-0" action="/records/category" method="GET">
+          <div class="form-row">
+            <select class="custom-select mr-sm-2" id="category" name="keyword">
+              <option selected>Choose...</option>
+              {{#each categoryMain}}
+              <option value="{{this}}">{{this}}</option>
+              {{/each}}
+            </select>
+          </div>
+          <button class="btn btn-outline-light ml-2 my-2 my-sm-0" type="submit">搜尋分類</button>
+        </form>
+        
+      </div>
+    </div>
+  </nav>
+  <main class="bg text-center">
+    <section class="centered">
+      {{{ body }}}
+    </section>
+  </main>
+</body>
+
+</html>
+

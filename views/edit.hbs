@@ -1,0 +1,42 @@
+<div class="card">
+    <div class="card-header">
+    Edit Expense Record
+  </div>
+<form class="card-body bg-light" action="/records/{{record._id}}?_method=PUT" method="POST">
+
+ <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="name">Expanse Description</label>
+      <input type="text" class="form-control" placeholder="expanse name" id="name" name="name" value="{{record.name}}">
+    </div>
+    <div class="form-group col-md-6">
+     <label for="amount">Amount Spent</label>
+     <input type="number" class="form-control" placeholder="amount" id="amount" name="amount" value="{{record.amount}}">
+    </div>
+
+  </div>
+  <div class="form-row">
+
+    <div class="form-group col-md-6">
+      <label for="date">Date</label>
+      <input class="form-control" type="date" id="date" name="date"
+       value="{{today}}"
+       min="01-01-2000" max="31-12-2040">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="category">Category</label>
+      <select class="custom-select mr-sm-2" id="category" name="category">
+        <option value={{record.category}} selected>{{record.category}}</option>
+        {{#each category}}
+        <option value="{{this}}">{{this}}</option>
+        {{/each}}
+      </select>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+  <a href="/">
+   <div class="btn btn-secondary">go back</div>  
+  </a>
+
+</form>
+</div>

@@ -1,0 +1,50 @@
+<div class="card">
+  <div class="card-header">
+    Add Expense Record
+  </div>
+
+<form action="/records" method="POST" class="card-body">
+
+    <div class="form-row mb-2">
+      <label for="name">Expanse Description</label>
+      <input type="text" class="form-control" placeholder="expanse name" id="name" name="name">
+    </div>
+
+    <div class="form-row mb-2"> 
+       <label for="amount">Amount Spent</label>
+       <div class="input-group">
+         <div class="input-group-prepend">
+          <span class="input-group-text">$</span>
+         </div>
+        <input type="number" value="1000.00" min="0" step="0.01"
+               class="form-control currency" id="amount" name="amount" 
+               />
+       </div>
+    </div>
+
+    <div class="form-row mb-2">
+      <label for="date">Date</label>
+      <input class="form-control" type="date" id="date" name="date"
+       value="{{today}}"
+       min="{{today}}" max="2040-12-31">
+    </div>
+
+    <div class="form-row mb-2">
+      <label for="category">Category</label>
+      <select class="custom-select mr-sm-2" id="category" name="category">
+        <option selected>Choose...</option>
+        {{#each category}}
+        <option value="{{this}}">{{this}}</option>
+        {{/each}}
+      </select>
+    </div>
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+  <a href="/">
+   <div class="btn btn-secondary">go back</div>  
+  </a>
+
+</form>
+</div>
+
+
