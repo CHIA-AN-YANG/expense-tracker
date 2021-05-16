@@ -1,4 +1,5 @@
 const express = require('express');
+const { NotExtended } = require('http-errors');
 const router = express.Router();
 const Record = require('../../models/record');
 const { toIcon } = require('../../public/javascripts/util');
