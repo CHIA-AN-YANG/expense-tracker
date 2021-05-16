@@ -1,4 +1,7 @@
 
+
+
+/* $global */
 :root{
 --font-c: #FFF;
 --light-c: #391c6e;
@@ -9,6 +12,7 @@ body {
   font: 1em 'Anonymous Pro', monospace;
   background-color: var(--bg-c);
 }
+/* $from a random template */
 .navbar {
   z-index: 10;
   width: 100vw;
@@ -25,18 +29,15 @@ body {
   overflow: scroll;
   z-index: 1;
 }
-
 .content {
   margin-top: 10%
 }
-
 .centered {
   position: absolute;
   top: 10vh;
   left: 50%;
   transform: translate(-50%, 0%)
 }
-
 .InputStyle {
   border-radius: 25px;
   border: solid 1px white;
@@ -63,29 +64,24 @@ input:focus {
   -moz-box-shadow: none;
   -webkit-box-shadow: none
 }
-
 .secondLine {
   font-weight: 350;
   font-size: 15px;
   margin-bottom: 15%;
   color: white
 }
-
 .firstLine {
   font-size: 30px;
   color: white
 }
-
 @media only screen and (max-width: 600px) {
-  .firstLine {
-      font-size: 20px
-  }
+  .firstLine { font-size: 20px }
 }
-
 a:link, a:hover {
  text-decoration: none;
 }
-/* self created classes */
+
+/* $self created classes */
 .col--category-icon{
   flex:50px;
 }
@@ -99,7 +95,7 @@ a:link, a:hover {
   flex: 150px;
 }
 
-/* fontawesome */
+/* $fontawesome */
 .container-sm{
   width: 600px;
 }
@@ -110,7 +106,8 @@ a:link, a:hover {
   filter: grayscale(30%);
   line-height: 100%;  
 }
-/* boostrap revision */
+
+/* $boostrap revision */
 .list-group {
   min-width: 600px;
   margin-bottom: 2em;

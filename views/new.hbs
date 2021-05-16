@@ -1,9 +1,10 @@
 <div class="card">
+
   <div class="card-header">
     Add Expense Record
   </div>
 
-<form action="/records" method="POST" class="card-body">
+  <form action="/records" method="POST" class="card-body">
 
     <div class="form-row mb-2">
       <label for="name">Expanse Description</label>
@@ -11,22 +12,22 @@
     </div>
 
     <div class="form-row mb-2"> 
-       <label for="amount">Amount Spent</label>
-       <div class="input-group">
-         <div class="input-group-prepend">
+      <label for="amount">Amount Spent</label>
+      <div class="input-group">
+        <div class="input-group-prepend">
           <span class="input-group-text">$</span>
-         </div>
+        </div>
         <input type="number" value="1000.00" min="0" step="0.01"
-               class="form-control currency" id="amount" name="amount" 
-               required/>
-       </div>
+              class="form-control currency" id="amount" name="amount" 
+              required/>
+      </div>
     </div>
 
     <div class="form-row mb-2">
       <label for="date">Date</label>
       <input class="form-control" type="date" id="date" name="date"
-       value="{{today}}"
-       min="{{today}}" max="2040-12-31" required>
+      value="{{today}}"
+      min="{{today}}" max="2040-12-31" required>
     </div>
 
     <div class="form-row mb-2">
@@ -39,12 +40,12 @@
       </select>
     </div>
 
-  <button type="submit" class="btn btn-primary">Submit</button>
-  <a href="/">
-   <div class="btn btn-secondary">go back</div>  
-  </a>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <a href="/">
+      <div class="btn btn-secondary">go back</div>  
+    </a>
 
-</form>
+  </form>
 </div>
 
 
