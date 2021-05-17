@@ -9,6 +9,9 @@ db.on('error', () => {console.log(`mongodb error! URI:${process.env.MONGODB_URI}
 
 db.once('open', () => {
   console.log('mongodb connected in seeder file')
-    Category.create({ name: categoryArr})
+  for(let i=0; i<categoryArr.length; i++){
+        Category.create({ name: categoryArr[i]})
+  }
+
   console.log('finish creating doc in db with category seeder')
 })

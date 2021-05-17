@@ -1,6 +1,6 @@
 const toIcon = function(Arr){
 Arr.forEach((item) => {
-  let icon;
+  let icon,color;
   switch (item['category']) { 
     case "家居物業":
       icon = 'home'

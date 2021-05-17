@@ -19,7 +19,8 @@ app.set('view engine', 'hbs')
 // mongoose
 require('./config/mongoose')
 
-app.locals.categoryMain = categoryArr;
+app.locals.categoryMain = categoryArr
+
 
 //提供網頁訊息的 middleware
 app.use(function(req, res, next) {

@@ -11,17 +11,17 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "mongoose": "^5.12.7",
-    "standard": "^16.0.3",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
-    "http-errors": "~1.6.3",
-    "morgan": "~1.9.1",
     "express": "^4.17.1",
     "express-handlebars": "^5.3.2",
+    "http-errors": "~1.6.3",
     "method": "^2.0.0",
     "method-override": "^3.0.0",
-    "override": "^0.0.1"
+    "mongoose": "^5.12.7",
+    "morgan": "~1.9.1",
+    "override": "^0.0.1",
+    "standard": "^16.0.3"
   },
   "main": "app.js",
   "description": ""

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Record = require('../../models/record');
 const Category = require('../../models/category');
-const { arrRemove, toIcon, categoryArr } = require('../../public/javascripts/util');
+const { arrRemove, toIcon } = require('../../public/javascripts/util');
 
 
 //create
@@ -15,7 +15,13 @@ router.get('/new', (req, res) => {
   d = d.split("/")
   let dateSet = [d[2],d[1],d[0]]
   dateSet = dateSet.join("-")
-  return res.render('new', {today:dateSet, category: categoryArr});
+  return Category.find()
+  .lean()
+  .then(data =>{
+    const cateArr = data.map(el => el.name)
+    res.render('new', {today:dateSet, category: cateArr});
+  })
+   
 });
 router.post('/', (req, res) => {
   let {name, date, category, amount} = req.body
@@ -34,10 +40,13 @@ router.get('/:id/edit', (req, res) => {
     record => {
       //dd-mm-yyyy => yyyy-mm-dd
       const dateSet = record.date
-      let categoryArr2 = []
-      for(i=0;i<categoryArr.length;i++){categoryArr2.push(categoryArr[i])}
-      const categoryArr3 = arrRemove(categoryArr2, record.category)
-      res.render('edit', { today:dateSet, record, categoryEdit:categoryArr3});
+      return Category.find()
+      .lean()
+      .then(data =>{
+        const cateArr = data.map(el => el.name)
+        arrRemove(cateArr, record.category)
+        res.render('edit', { today: dateSet, record, categoryEdit: cateArr});
+      })
     }
   )
   
@@ -74,7 +83,13 @@ router.get('/category', (req, res) => {
   .then(data => { filteredData = data.filter(el =>{ return el.category==keyword }) })
   .then(() =>{
     toIcon(filteredData);
-    res.render('index',{records: filteredData, category: categoryArr})})
+    return Category.find()
+    .lean()
+    .then(data =>{
+      const cateArr = data.map(el => el.name)
+      res.render('index', {records: filteredData, category: cateArr});
+    })
+  })
   .catch(error => console.error(error))
 })
 
