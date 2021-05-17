@@ -13,7 +13,7 @@
 
     <div class="col--expense-info d-flex w-400 flex-column">
       <h5>{{this.name}}</h5>
-      <small>Date: <span>{{this.date}}</span></small>
+      <small>Date: <span>{{this.momentDate}}</span></small>
     </div>
 
     <div class="col--expense-amount d-flex w-400 flex-column">
@@ -29,7 +29,7 @@
         </button>
       </a>
 
-      <form class="btn--delete d-inline-block" action="/records/{{ this._id }}?_method=DELETE" method="POST">
+      <form id="form--delete" class="btn--delete d-inline-block" action="/records/{{ this._id }}?_method=DELETE" method="POST">
         <button class="btn btn-outline-success btn-sm my-4 my-sm-2 " type="submit">
           Delete
         </button>
@@ -49,6 +49,6 @@
 
 </ul>
 
-<script type="text/javascript" src="/javascripts/home.js"></script>
+
 
 

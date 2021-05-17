@@ -12,6 +12,5 @@ db.once('open', () => {
   for(let i=0; i<categoryArr.length; i++){
         Category.create({ name: categoryArr[i]})
   }
-
   console.log('finish creating doc in db with category seeder')
 })

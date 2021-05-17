@@ -21,8 +21,7 @@
 {{!-- fontawesome (old version) --}}
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-{{!-- pick a day --}}
-  <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
+
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
 {{!-- import font: Anonymous Pro --}}
 <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -74,9 +73,19 @@
   </main>
 
 
-<script src="pikaday.js"></script>
+{{!-- pick a day --}}
+<script type="text/javascript" src="/javascripts/home.js"></script>
+<script src="https://momentjs.com/downloads/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
 <script>
-    var picker = new Pikaday({ field: document.getElementById('datepicker') });
+    let picker = new Pikaday(
+    {
+        field: document.getElementById('datepicker'),
+        firstDay: 1,
+        minDate: new Date(2000, 12, 31),
+        maxDate: new Date(2040, 12, 31),
+        yearRange: [2000,2040]
+    });
 </script>
 </body>
 
