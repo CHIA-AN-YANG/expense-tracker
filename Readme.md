@@ -46,6 +46,10 @@ The npm used in this project is **6.14.12**. This project is built under **Node.
 ```bash
 node app.js
 ```
+Or use the script:
+```bash
+npm run start
+```
 If you wish to automatically restarting the node application when file changes are detected, you may run nodemon.
 
 ```bash
@@ -55,10 +59,10 @@ You can also take advantage of the script:
 ```bash
 npm run dev
 ```
-Now, enter http://localhost:3000/ in your browser to see it on the browser!
+Now, enter http://localhost:3000/ in your browser to see it on web!
 
 ### Delete all records
 The link http://localhost:3000/destroy will remove all data in your records. Please use with caution.
 
 ## Contact
-Feel free to drop me a line and let me know how can I make this project better
+Feel free to drop me a line about this project, and let me know how to make it better
