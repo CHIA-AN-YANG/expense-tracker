@@ -10,14 +10,15 @@ db.once('open', () => {
   console.log('mongodb connected in seeder file')
   for (let i = 0; i < 10; i++) {
     let plusNow = Date.now()-5000000*i
-    console.log('d:',d)
     Record.create(
       { 
         name: 'name-' + i, 
         amount: 1000+i*3, 
         date: plusNow, 
-        category: categoryArr[i%5] 
+        categoryId: i%5 
       }
-    )}
+    )
+  }
+  
   console.log('finish creating doc in db with record seeder')
 })

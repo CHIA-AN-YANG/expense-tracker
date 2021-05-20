@@ -6,7 +6,7 @@
     "dev": "nodemon app.js",
     "start": "node app.js",
     "seed": "node models/seeds/recordSeeder.js",
-    "categorySeed": "node models/seeds/categorySeeder.js"
+    "seed2": "node models/seeds/categorySeeder.js"
   },
   "keywords": [],
   "author": "",
