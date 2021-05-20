@@ -1,21 +1,21 @@
 const express = require('express');
 const router = express.Router();
 const Record = require('../../models/record');
-const { toIcon } = require('../../public/javascripts/util');
-const moment = require('moment')
+const moment = require('moment');
 
 /* GET users listing. */
 router.get('/', (req, res) => {
   Record.find()
-  .lean()
-  .sort({ _id: 'asc' })
+  .lean({ virtuals: true })
+  .sort({ date: `asc` })
   .then(
     records => {
-    toIcon(records);
-    records.forEach(record => record.momentDate = moment(record.date).format('YYYY[-]MM[-]DD'))
-    res.render('index', { records })
-    }
+      records.forEach( 
+        record => { record.momentDate = moment(record.date).format('YYYY[-]MM[-]DD') }
       )
+      return records
+  })
+  .then( records =>{ res.render('index', { records }) })
   .catch(error => console.error('homepage', error))
 });
 

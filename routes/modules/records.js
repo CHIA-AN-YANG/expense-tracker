@@ -1,25 +1,26 @@
 const express = require('express');
 const router = express.Router();
-const Record = require('../../models/record');
-const Category = require('../../models/category');
+const Record = require('../../models/record')
 const moment = require('moment')
 const { arrRemove, toIcon } = require('../../public/javascripts/util');
+const { set } = require('mongoose');
 
 
 //create
 router.get('/new', (req, res) => {
   const dateSet = moment(new Date()).format('YYYY[-]MM[-]DD')
-  return Category.find()
-  .lean()
-  .then(data =>{
-    const cateArr = data.map(el => el.name)
-    res.render('new', {today:dateSet, category: cateArr});
+  return Record.find()
+  .lean({ virtuals: true })
+  .then(docs =>{
+    let cateArr = docs.map(doc => doc.category.name)
+    cateArr = [...new Set(cateArr)]
+    res.render('new', { today: dateSet, category: cateArr });
   })
    
 });
 router.post('/', (req, res) => {
-  let {name, date, category, amount} = req.body
-  return Record.create({name, date, category, amount})   
+  let {name, date, categoryId, amount} = req.body
+  return Record.create({name, date, categoryId, amount})   
     .then(() => res.redirect('/')) 
     .catch(error => console.log('add new',error))
 });
@@ -29,15 +30,21 @@ router.post('/', (req, res) => {
 router.get('/:id/edit', (req, res) => {
   const id = req.params.id
   Record.findById(id)
-  .lean()
+  .lean({ virtuals: true })
   .then(
     record => {
       record.momentDate = moment(record.date).format('YYYY[-]MM[-]DD')
-      return Category.find()
-      .lean()
-      .then(data =>{
-        const cateArr = data.map(el => el.name)
-        arrRemove(cateArr, record.category)
+      return Record.find()
+      .lean({ virtuals: true })
+      .sort({ date: `asc` })
+      .then(docs =>{
+        let cateArr = docs.map(doc => doc.category.name)
+        cateArr = [...new Set(cateArr)]
+        // let cateArr = docs.map(doc => {
+        //   let isActive = false
+        //   if(doc.category.name === record.category.name){ isActive = true }
+        //   return { 'name': doc.category.name, 'isActive': isActive, 'idx': doc.category.idx }        
+        // })
         res.render('edit', { record, categoryEdit: cateArr});
       })
     }
@@ -46,11 +53,13 @@ router.get('/:id/edit', (req, res) => {
 });
 router.put('/:id', (req, res) => {
   const id = req.params.id
-  let {name, date, category, amount} = req.body
+  let {name, date, categoryId, amount} = req.body
+  console.log(id)
+  console.dir(req.body)
   Record.findById(id)
         .then( record =>{
           record.name = name
-          record.category = category
+          record.categoryId = categoryId
           record.amount = amount
           record.date = date
           record.save()

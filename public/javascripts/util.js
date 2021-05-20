@@ -1,8 +1,7 @@
-const toIcon = function(item){
+const toIcon = function(id){
   let icon,color,name ;
   let newObj ={}
-  console.log('categoryId: '+item.categoryId)
-  switch (item.categoryId) { //Record 將單一文件傳入時，去尋找categoryId 
+  switch (id) { //Record 將單一文件傳入時，去尋找categoryId 
     case 0:
       name = "家居物業",
       icon = 'home'
@@ -29,10 +28,10 @@ const toIcon = function(item){
       color = "#5f3677"
       break
   }
+  newObj.idx = id
   newObj.name = name
   newObj.icon = icon
   newObj.color = color
-
 return newObj;
 }
 
