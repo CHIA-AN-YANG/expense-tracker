@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router()
 const Category = require('../../models/category')
 
-
 //will remove all documents in "categories", please use carefully.
 router.get('/destroy', (req, res) => {
   return Category.deleteMany({}, () => {

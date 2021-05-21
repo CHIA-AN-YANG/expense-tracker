@@ -33,12 +33,13 @@ npm install
 Download mongoDB Campass to set up your own local database.
 ### Seeding
 There are two seeder files for this project. Simply use the following command to seed:
+This is for category seeder. It should only be executed once. Otherwise, there will be redundant categories.
 ```bash
 npm run seed
 ```
-This category seeder should only be executed once. Otherwise, there will be redundant categories.
+This command is for records. Only use it after category is seeded. It requires Category's ObjectId (from Category Model).
 ```bash
-npm run categorySeed
+npm run seed2
 ```
 ### Run on browser
 The npm used in this project is **6.14.12**. This project is built under **Node.js v14.16.1** runtime environment, with Express framework. To start it on local server, simply run the app.js file with `node` command in CLI:
@@ -62,7 +63,9 @@ npm run dev
 Now, enter http://localhost:3000/ in your browser to see it on web!
 
 ### Delete all records
-The link http://localhost:3000/destroy will remove all data in your records. Please use with caution.
+In order to re-run seeder files, you can delete all documents first:
+The link http://localhost:3000/records/destroy will remove all data in your records. Please use with caution.
+The link http://localhost:3000/categories/destroy will remove all data in your records. Please use with caution.
 
 ## Contact
 Feel free to drop me a line about this project, and let me know how to make it better

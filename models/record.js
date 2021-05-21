@@ -8,6 +8,5 @@ const recordSchema = new mongoose.Schema({
   category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' }
 })
 
-
 module.exports = mongoose.model('Record', recordSchema)
 

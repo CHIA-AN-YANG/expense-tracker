@@ -4,19 +4,7 @@ const Record = require('../../models/record');
 const Category = require('../../models/category');
 const moment = require('moment');
 
-
-
-/* for test only */
-router.get('/test', (req, res) => {
-  Record.findOne({'name': 'Bibi'})
-  .populate({path:'category', select:'name'})
-  .exec((err, doc) =>{ if (err) return handleError("test "+ error)
-    console.log("doc: "+doc)
-
-  } )
-});
-
-/* GET users listing. */
+// render homepage listing
 router.get('/', (req, res) => {
   Record.find()
   .lean()

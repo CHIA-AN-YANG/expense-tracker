@@ -18,12 +18,12 @@ app.engine('hbs', exphbs({
   defaultLayout: 'main',
   extname: '.hbs',
 }))
-
 app.set('view engine', 'hbs')
 
 // mongoose
 require('./config/mongoose')
 
+// set full scoped variable
 app.locals.categoryMain = categoryArr
 
 
@@ -46,9 +46,6 @@ app.use(function(req, res, next) {
 //route setting
 const routes = require('./routes')
 app.use(routes)
-
-
-
 
 app.listen(PORT, () => {
   console.log(`App is running on port ${PORT}`)
