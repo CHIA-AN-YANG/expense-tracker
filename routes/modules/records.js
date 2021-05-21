@@ -1,26 +1,27 @@
 const express = require('express');
 const router = express.Router();
 const Record = require('../../models/record')
+const Category = require('../../models/category')
 const moment = require('moment')
-const { arrRemove, toIcon } = require('../../public/javascripts/util');
-const { set } = require('mongoose');
+const { toCategoryObjId, toIcon } = require('../../public/javascripts/util');
 
 
 //create
 router.get('/new', (req, res) => {
   const dateSet = moment(new Date()).format('YYYY[-]MM[-]DD')
-  return Record.find()
-  .lean({ virtuals: true })
+  return Category.find()
+  .lean()
   .then(docs =>{
-    let cateArr = docs.map(doc => doc.category.name)
-    cateArr = [...new Set(cateArr)]
-    res.render('new', { today: dateSet, category: cateArr });
-  })
-   
+    res.render('new', { today: dateSet, category: docs });
+  })   
 });
 router.post('/', (req, res) => {
   let {name, date, categoryId, amount} = req.body
-  return Record.create({name, date, categoryId, amount})   
+  categoryId = Number(categoryId)
+  console.log(`categoryId: ${categoryId}`)
+  let category = toCategoryObjId(categoryId)
+  console.log(`category: ${category}`)
+  return Record.create({name, date, category, amount})   
     .then(() => res.redirect('/')) 
     .catch(error => console.log('add new',error))
 });
@@ -30,22 +31,20 @@ router.post('/', (req, res) => {
 router.get('/:id/edit', (req, res) => {
   const id = req.params.id
   Record.findById(id)
-  .lean({ virtuals: true })
-  .then(
-    record => {
+  .lean()
+  .populate('category')
+  .exec(
+    (err, record) => {
+      if(err){ console.log(handleError(err))}
       record.momentDate = moment(record.date).format('YYYY[-]MM[-]DD')
-      return Record.find()
-      .lean({ virtuals: true })
-      .sort({ date: `asc` })
+      console.log(`record's category id: ${record.category.categoryId}`)
+      return Category.find()
+      .lean()
       .then(docs =>{
-        let cateArr = docs.map(doc => doc.category.name)
-        cateArr = [...new Set(cateArr)]
-        // let cateArr = docs.map(doc => {
-        //   let isActive = false
-        //   if(doc.category.name === record.category.name){ isActive = true }
-        //   return { 'name': doc.category.name, 'isActive': isActive, 'idx': doc.category.idx }        
-        // })
-        res.render('edit', { record, categoryEdit: cateArr});
+        docs.forEach(doc => {
+         if(record.category.categoryId == doc.categoryId){ doc.isActive = true }
+        })
+        res.render('edit', { record, category: docs});
       })
     }
   )
@@ -59,7 +58,7 @@ router.put('/:id', (req, res) => {
   Record.findById(id)
         .then( record =>{
           record.name = name
-          record.categoryId = categoryId
+          record.category = toCategoryObjId(Number(categoryId))
           record.amount = amount
           record.date = date
           record.save()
@@ -82,17 +81,22 @@ router.get('/category', (req, res) => {
   let filteredData = []
   Record.find()
   .lean()
-  .then(data => { filteredData = data.filter(el =>{ return el.category==keyword }) })
-  .then(() =>{
-    toIcon(filteredData);
-    return Category.find()
-    .lean()
-    .then(data =>{
-      const cateArr = data.map(el => el.name)
-      res.render('index', {records: filteredData, category: cateArr});
-    })
+  .populate('category')
+  .exec((err, docs) => {
+    if(err){return handleError(err)}
+    docs.forEach(doc => { doc.momentDate = moment(doc.date).format('YYYY[-]MM[-]DD') })
+    filteredData = docs.filter(el =>{ return el.category.categoryId==keyword })
+      res.render('index', {records: filteredData}); 
   })
-  .catch(error => console.error(error))
 })
+
+
+//will delete all documents in "records", please use carefully.
+router.get('/destroy', (req, res) => {
+  return Record.deleteMany({}, () => {
+    console.log('All record documents have been removed.')  
+    res.redirect('/')
+  }).catch(error => console.log('add new',error))
+});
 
 module.exports = router;

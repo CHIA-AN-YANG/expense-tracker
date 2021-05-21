@@ -1,0 +1,27 @@
+[
+{"categoryId": 0,
+"name": "家居物業",
+"icon": "home",
+"color": "#08cbab"
+},
+{"categoryId": 1,
+"name": "交通出行",
+"icon": "bus",
+"color": "#81d20f"
+},
+{"categoryId": 2,
+"name": "休閒娛樂",
+"icon": "smile-o",
+"color": "#cc7d98"
+},
+{"categoryId": 3,
+"name": "餐飲食品",
+"icon": "spoon",
+"color": "#fc4f51"
+},
+{"categoryId": 4,
+"name": "其他",
+"icon": "pencil",
+"color": "#5f3677"
+}
+]

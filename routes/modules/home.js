@@ -1,27 +1,32 @@
 const express = require('express');
 const router = express.Router();
 const Record = require('../../models/record');
+const Category = require('../../models/category');
 const moment = require('moment');
+
+
+
+/* for test only */
+router.get('/test', (req, res) => {
+  Record.findOne({'name': 'Bibi'})
+  .populate({path:'category', select:'name'})
+  .exec((err, doc) =>{ if (err) return handleError("test "+ error)
+    console.log("doc: "+doc)
+
+  } )
+});
 
 /* GET users listing. */
 router.get('/', (req, res) => {
   Record.find()
-  .lean({ virtuals: true })
-  .sort({ date: `asc` })
-  .then(
-    records => {
-      records.forEach( 
-        record => { record.momentDate = moment(record.date).format('YYYY[-]MM[-]DD') }
-      )
-      return records
+  .lean()
+  .populate('category')
+  .exec((err, records) => {
+    if(err){return handleError(err)}
+    records.forEach(record => { record.momentDate = moment(record.date).format('YYYY[-]MM[-]DD') })
+    res.render('index', { records })    
   })
-  .then( records =>{ res.render('index', { records }) })
-  .catch(error => console.error('homepage', error))
 });
 
-//will delete all documents in "records", please use carefully.
-router.get('/destroy', (req, res) => {
-  return Record.deleteMany({}, () => res.redirect('/')).catch(error => console.log('add new',error))
-});
 
 module.exports = router;

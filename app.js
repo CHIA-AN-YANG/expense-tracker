@@ -2,6 +2,7 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
 const methodOverride = require('method-override')
+const Category = require("./models/category")
 const app = express();
 const PORT = process.env.PORT || 3000
 app.use(express.static('public'))
@@ -13,7 +14,11 @@ app.use(express.json());
 app.use(methodOverride('_method'))
 
 //set view engine
-app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
+app.engine('hbs', exphbs({ 
+  defaultLayout: 'main',
+  extname: '.hbs',
+}))
+
 app.set('view engine', 'hbs')
 
 // mongoose
@@ -40,8 +45,10 @@ app.use(function(req, res, next) {
 
 //route setting
 const routes = require('./routes')
-app.use(routes,(req, res, next) => {
-  console.log('end!')} )
+app.use(routes)
+
+
+
 
 app.listen(PORT, () => {
   console.log(`App is running on port ${PORT}`)
