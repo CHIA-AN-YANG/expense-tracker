@@ -3,8 +3,6 @@ const router = express.Router();
 const Record = require('../../models/record')
 const Category = require('../../models/category')
 const moment = require('moment')
-const { toCategoryObjId, toIcon } = require('../../public/javascripts/util');
-
 
 //create
 router.get('/new', (req, res) => {
@@ -18,10 +16,20 @@ router.get('/new', (req, res) => {
 router.post('/', (req, res) => {
   let {name, date, categoryId, amount} = req.body
   categoryId = Number(categoryId)
-  console.log(`categoryId: ${categoryId}`)
-  let category = toCategoryObjId(categoryId)
-  console.log(`category: ${category}`)
-  return Record.create({name, date, category, amount})   
+  let cateObjId
+  return Category.findOne(
+    { 'categoryId':categoryId }, 
+    function(err, doc){
+      cateObjId = doc._id
+      Record.create(
+        { 
+          name: name, 
+          amount: amount, 
+          date: date, 
+          category: cateObjId
+        }
+      )
+    })  
     .then(() => res.redirect('/')) 
     .catch(error => console.log('add new',error))
 });
@@ -37,7 +45,6 @@ router.get('/:id/edit', (req, res) => {
     (err, record) => {
       if(err){ console.log(handleError(err))}
       record.momentDate = moment(record.date).format('YYYY[-]MM[-]DD')
-      console.log(`record's category id: ${record.category.categoryId}`)
       return Category.find()
       .lean()
       .then(docs =>{
@@ -53,19 +60,24 @@ router.get('/:id/edit', (req, res) => {
 router.put('/:id', (req, res) => {
   const id = req.params.id
   let {name, date, categoryId, amount} = req.body
-  console.log(id)
-  console.dir(req.body)
-  Record.findById(id)
-        .then( record =>{
-          record.name = name
-          record.category = toCategoryObjId(Number(categoryId))
-          record.amount = amount
-          record.date = date
-          record.save()
-        }
-        )
-        .then(() => {res.redirect('/')})
-        .catch(error => console.log('edit',error))
+  let cateObjId
+  categoryId = Number(categoryId)
+  return Category.findOne(
+    {'categoryId':categoryId}, 
+    function(err, doc){
+      cateObjId = doc._id
+      Record.findById(id)
+      .then( record =>{
+        record.name = name
+        record.category = cateObjId
+        record.amount = amount
+        record.date = date
+        record.save()
+      }
+    )
+    })  
+    .then(() => res.redirect('/')) 
+    .catch(error => console.log('edit',error))
 });
 
 // delete

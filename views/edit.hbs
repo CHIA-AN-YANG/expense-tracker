@@ -5,7 +5,12 @@
   
     <div class="form-row mb-2">
       <label for="name">Expanse Description</label>
-      <input type="text" class="form-control" placeholder="expanse name" id="name" name="name" value="{{record.name}}" required>
+      <input type="text" class="form-control" 
+             placeholder="expanse name" 
+             id="name" name="name" 
+             value="{{record.name}}"  
+             maxlength="15" 
+             required >
     </div>
     
     <div class="form-row mb-2">
