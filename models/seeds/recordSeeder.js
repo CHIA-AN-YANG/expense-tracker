@@ -16,12 +16,17 @@ db.once('open', () => {
   for (let i = 0; i < 10; i++) {
     let plusNow = Date.now()-5000000*i
     let cateObjId
+<<<<<<< HEAD
 
      //find the corresponding ObjectId in Category Model
     category.findOne({'categoryId':i%5}, function(err, doc){ 
      
       cateObjId = doc._id
       //create one Record doc via for loop
+=======
+    category.findOne({'categoryId':i%5}, function(err, doc){
+      cateObjId = doc._id
+>>>>>>> 46c26c92b5a8ed67d82e6fffc6cc8c0fa18d3132
       Record.create(
         { 
           name: 'name-' + i, 
