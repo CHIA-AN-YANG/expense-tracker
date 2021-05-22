@@ -4,7 +4,11 @@ const Record = require('../../models/record')
 const Category = require('../../models/category')
 const moment = require('moment')
 
+<<<<<<< HEAD
 // create a new record
+=======
+//create
+>>>>>>> 46c26c92b5a8ed67d82e6fffc6cc8c0fa18d3132
 router.get('/new', (req, res) => {
   const dateSet = moment(new Date()).format('YYYY[-]MM[-]DD')
   return Category.find()
