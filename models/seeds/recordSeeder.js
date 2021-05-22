@@ -16,7 +16,6 @@ db.once('open', () => {
   for (let i = 0; i < 10; i++) {
     let plusNow = Date.now()-5000000*i
     let cateObjId
-
      //find the corresponding ObjectId in Category Model
     category.findOne({'categoryId':i%5}, function(err, doc){ 
      
