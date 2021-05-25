@@ -1,10 +1,7 @@
-const mongoose = require('mongoose')
+const db = require('../../config/mongoose.js')
 const Category = require('../category')
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/local'
 const seeder = require('./categorySeeder.json')
 
-mongoose.connect(MONGODB_URI, {useNewUrlParser: true, useUnifiedTopology: true}) 
-const db = mongoose.connection
 db.on('error', () => {console.log(`mongodb error! URI:${process.env.MONGODB_URI}`)})
 
 db.once('open', () => {
