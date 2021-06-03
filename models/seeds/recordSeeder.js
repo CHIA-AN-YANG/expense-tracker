@@ -1,30 +1,59 @@
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
 const db = require('../../config/mongoose.js')
 const Record = require('../record')
-const category = require('../category')
+const User = require('../users')
+const Category = require('../category')
+const bcrypt = require('bcryptjs')
 
-db.on('error', () => {console.log(`mongodb error! URI:${process.env.MONGODB_URI}`)})
-db.once('open', () => {
-
-  console.log('mongodb connected in seeder file')
-  for (let i = 0; i < 10; i++) {
-    let plusNow = Date.now()-5000000*i
-    let cateObjId
-     //find the corresponding ObjectId in Category Model
-    category.findOne({'categoryId':i%5}, function(err, doc){ 
-     
-      cateObjId = doc._id
-      //create one Record doc via for loop
-      Record.create(
-        { 
-          name: 'name-' + i, 
-          amount: 1000+i*3, 
-          date: plusNow, 
-          category: String(cateObjId)
-        }
-      )
-    })
-
+const SEED_USER =  {
+    name: 'seedUser1',
+    email: 'user1@example.com',
+    password: '12345678'
   }
-  
-  console.log('finish creating doc in db with record seeder')
+
+function promiseCreateRecord(num, id){ 
+    Category.findOne({categoryId:num%4 })
+    .lean()
+    .then((doc) => {
+      let plusNow = Date.now()-5000000*num
+      return Record.create(
+        { userId: id,
+          name: `name-${num}`, 
+          amount: 1000+num*3, 
+          date: plusNow, 
+          category: String(doc._id),
+          merchant: `merchant${num}`
+        }
+        )
+    })
+    .catch( err => console.log(err))
+}
+
+db.once('open', () => {
+  let userId
+  User.findOne({user_name:SEED_USER.name})
+  .then(user => {
+    if(user){ return userId = user._id }
+    bcrypt 
+      .genSalt(10)
+      .then(salt => bcrypt.hash(SEED_USER.password, salt))
+      .then(hash => User.create({
+        user_name: SEED_USER.name, 
+        user_email: SEED_USER.email, 
+        password: hash
+      }))
+      .then(user => { 
+        userId = user._id
+      }).catch(err => console.log(err))     
+  })
+  .then(() => Promise.all(Array.from({length:10}, (_, i) =>{promiseCreateRecord(i, userId)})))
+  .then(() => {
+    console.log(`seed creation finished.`)
+    process.exit()
+  })
+  .catch(err => console.log(err))
 })
+
+
