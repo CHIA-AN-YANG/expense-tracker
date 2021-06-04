@@ -17,6 +17,9 @@ body {
   z-index: 10;
   width: 100vw;
 }
+.nav-link,.nav-link:hover {
+  color: var(--font-c);
+}
 .bg {
   position: relative;
   width: 100%;

@@ -14,6 +14,7 @@ router.get('/new', (req, res) => {
   })   
 });
 router.post('/', (req, res) => {
+  const userId = req.user._id
   let {name, date, categoryId, amount} = req.body
   categoryId = Number(categoryId)
   let cateObjId
@@ -23,6 +24,7 @@ router.post('/', (req, res) => {
       cateObjId = doc._id
       Record.create(
         { 
+          userId,
           name: name, 
           amount: amount, 
           date: date, 
@@ -90,8 +92,9 @@ router.delete('/:id', (req, res) => {
 // filter with category
 router.get('/category', (req, res) => {
   const keyword = req.query.keyword
+  const userId = req.user._id
   let filteredData = []
-  Record.find()
+  Record.find({ userId })
   .lean()
   .populate('category')
   .exec((err, docs) => {
