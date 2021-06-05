@@ -31,31 +31,32 @@ module.exports = app => {
       .catch(err => done(err, false))
   }))
 
-  passport.use(new FacebookStrategy({
-    clientID: process.env.FACEBOOK_ID,
-    clientSecret: process.env.FACEBOOK_SECRET,
-    callbackURL: process.env.FACEBOOK_CALLBACK,
-  }, (accessToken, refreshToken, profile, done) => {
-    console.log(profile._json)
-    const { email, name } = profile._json
-    User.findOne({ user_email: email })
-    .then(user => {
-      if(user){
-        return done(null, user)
-      }else{
-      const password = Math.random().toString(36).slice(-8)
-      return bcrypt
-      .genSalt(10)
-      .then(salt => bcrypt.hash(password, salt))
-      .then(hash => User.create({
-        user_name: name,
-        user_email: email,
-        password: hash
-      }))}
-    })
-    .then(user => done(null, user))
-    .catch(err => done(err, false))
-  }))
+  passport.use(new FacebookStrategy(
+    {
+      clientID: process.env.FACEBOOK_ID,
+      clientSecret: process.env.FACEBOOK_SECRET,
+      callbackURL: process.env.FACEBOOK_CALLBACK,
+      profileFields: ['displayName', 'emails'] //needs to be 'emails' rather than 'email.'
+    }, 
+    (accessToken, refreshToken, profile, done) => {
+      const { name, email } = profile._json
+      User.findOne({ user_email: email })
+      .then(user => {
+        if(user){return done(null, user)
+        }else{
+        const password = Math.random().toString(36).slice(-8)
+        return bcrypt
+        .genSalt(10)
+        .then(salt => bcrypt.hash(password, salt))
+        .then(hash => User.create({
+          user_name: name,
+          user_email: email,
+          password: hash
+        }))}
+      })
+      .then(user => done(null, user))
+      .catch(err => done(err, false))
+    }))
 
   passport.serializeUser((user, done) => { done(null, user.id) })
   passport.deserializeUser((id, done) => {

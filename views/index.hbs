@@ -1,3 +1,33 @@
+<div class="box-float">
+  {{>message}}
+</div>
+<form class="form-inline my-2 my-lg-0" action="/records/filter" method="GET">
+  <div class="form-row mb-2">
+    <select class="custom-select mr-sm-2" id="category" name="keyword">
+      <option value="" selected>選分類</option>
+      {{#each categoryMain}}
+        <option value={{this.categoryId}}>{{this.name}}</option>
+      {{/each}}
+    </select>
+    <p class="light">選擇要查詢的月份</p>
+    <select class="custom-select mr-sm-2" name="pickyear">
+      <option value={{currentYear}} selected>{{currentYear}}</option>
+      {{#each years}}
+        <option value={{this}}>{{this}}</option>
+      {{/each}}
+    </select>
+    <select class="custom-select mr-sm-2" name="pickmonth">
+      <option value="" selected>選月份</option>
+      {{#each months}}
+        <option value={{this}}>{{this}}</option>
+      {{/each}}
+    </select>
+   
+    <button class="btn btn-outline-light ml-2 my-2 my-sm-0" type="submit">過濾項目</button>
+  </div>
+  
+</form>
+
 <ul class="list-group">
   <li class="list-group-item d-flex">
     <h3 class="cost--sum">Total Cost: <span id="total-record-cost">0000</span></h3>
@@ -13,6 +43,7 @@
 
     <div class="col--expense-info d-flex w-400 flex-column">
       <h5>{{this.name}}</h5>
+      <small><span>{{this.merchant}}</span></small>
       <small>Date: <span>{{this.momentDate}}</span></small>
     </div>
 

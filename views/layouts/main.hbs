@@ -49,7 +49,7 @@
           </li>
         </ul>
 
-        <form class="form-inline my-2 my-lg-0" action="/records/category" method="GET">
+        {{!-- <form class="form-inline my-2 my-lg-0" action="/records/category" method="GET">
           <div class="form-row">
             <select class="custom-select mr-sm-2" id="category" name="keyword">
               <option selected>Choose...</option>
@@ -59,7 +59,7 @@
             </select>
           </div>
           <button class="btn btn-outline-light ml-2 my-2 my-sm-0" type="submit">搜尋分類</button>
-        </form>
+        </form> --}}
         
       </div>
     </div>
@@ -85,13 +85,19 @@
 <script src="https://momentjs.com/downloads/moment.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
 <script>
-    let picker = new Pikaday( 
+    let pickerRecord = new Pikaday( 
     {
         field: document.getElementById('datepicker'),
         firstDay: 1,
-        minDate: new Date(2000, 12, 31),
+        minDate: new Date(1970, 1, 1),
         maxDate: new Date(2040, 12, 31),
-        yearRange: [2000,2040]
+        yearRange: [1970,2040]
+    });
+    let pickerIndex = new Pikaday( 
+    {
+        field: document.getElementById('monthsearch'),
+        format: 'MMM YYYY',
+        yearRange: [1970,2040]
     });
 </script>
 </body>

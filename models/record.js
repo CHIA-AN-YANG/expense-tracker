@@ -8,9 +8,16 @@ const recordSchema = new mongoose.Schema({
     index: true,
     required: true
   },
-  name: { type: String, required: true},
+  name: { 
+    type: String, 
+    required: true
+  },
   amount: { type: Number, required: [true, `Be Honest of how mush u've spent.`] },
-  date: { type: Date, Default: Date.now() },
+  date: { 
+    type: Date, 
+    Default: Date.now(),
+    min: '2000-01-01'
+  },
   category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
   merchant: { type: String }
 })
