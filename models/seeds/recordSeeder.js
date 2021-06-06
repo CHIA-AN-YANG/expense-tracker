@@ -13,31 +13,31 @@ const SEED_USER =  {
     password: '12345678'
   }
 
-function promiseCreateRecord(num, id){ 
-  Category.findOne({ categoryId: num%4 })
-  .lean()
-  .then((doc) => {
-    console.log(`create seed ${num}...`)
-    let plusNow = Date.now()-150000000*num
-    return Record.create(
-      { userId: id,
-        name: `name-${num}`, 
-        amount: 1000+num*3, 
-        date: plusNow, 
-        category: String(doc._id),
-        merchant: `merchant${num}`
-      }
-      )
-  })
-  .catch( err => console.log(err))
-}
+// function promiseCreateRecord(num, id){ 
+//   Category.findOne({ categoryId: num%4 })
+//   .lean()
+//   .then((doc) => {
+//     console.log(`create seed ${num}...`)
+//     let plusNow = Date.now()-150000000*num
+//     return Record.create(
+//       { userId: id,
+//         name: `name-${num}`, 
+//         amount: 1000+num*3, 
+//         date: plusNow, 
+//         category: String(doc._id),
+//         merchant: `merchant${num}`
+//       }
+//       )
+//   })
+//   .catch( err => console.log(err))
+// }
 
 db.once('open', () => {
   let userId
   User.findOne({user_name:SEED_USER.name})
   .then(user => {
     if(user){ return userId = user._id }
-    bcrypt 
+    return bcrypt 
       .genSalt(10)
       .then(salt => bcrypt.hash(SEED_USER.password, salt))
       .then(hash => User.create({
@@ -48,12 +48,31 @@ db.once('open', () => {
       .then(user => { 
         userId = user._id
         console.log(`new user created! user id: ${userId}`)
-      }).catch(err => console.log(err))     
+      }).catch(err => console.log(err))    
   })
   .then(() => {
     console.log('enter this section')
     return Promise.any(
-     Array.from({length:10}, (_, i) => { promiseCreateRecord(i,userId)})
+     Array.from({length:10}, (_, i) => { 
+      
+        Category.findOne({ categoryId: i%4 })
+        .lean()
+        .then((doc) => {
+          console.log(`create seed ${i}...`)
+          let plusNow = Date.now()-150000000*i
+          return Record.create(
+            { userId,
+              name: `name-${i}`, 
+              amount: 1000+i*3, 
+              date: plusNow, 
+              category: String(doc._id),
+              merchant: `merchant${i}`
+            }
+            )
+        })
+        .catch( err => console.log(err))
+      
+     })
     )
   })
   .then(() => {
