@@ -14,10 +14,10 @@ const SEED_USER =  {
   }
 
 function promiseCreateRecord(num, id){ 
-    Category.findOne({categoryId:num%4 })
+    Category.findOne({ categoryId: num%4 })
     .lean()
     .then((doc) => {
-      let plusNow = Date.now()-5000000*num
+      let plusNow = Date.now()-150000000*num
       return Record.create(
         { userId: id,
           name: `name-${num}`, 
@@ -50,7 +50,7 @@ db.once('open', () => {
   })
   .then(() => Promise.all(Array.from({length:10}, (_, i) =>{promiseCreateRecord(i, userId)})))
   .then(() => {
-    console.log(`seed creation finished.`)
+    console.log(`seed creation completed.`)
     process.exit()
   })
   .catch(err => console.log(err))

@@ -93,6 +93,7 @@ router.get('/filter', (req, res) => {
 // filter with category & month
 const filter = function(id, cate, start, end){
   let filteredData = []
+  console.log(`start: ${start} end: ${end}`)
   Record.find({ userId: id, date: { $gte: start, $lt: end }})
   .lean()
   .populate('category')
@@ -109,10 +110,9 @@ const filter = function(id, cate, start, end){
 }
   if(!(keyword || month)){
     req.flash('error_msg', '類別與月份至少要選一個。')
-    return res.redirect('/') 
   }
   if(!month){
-    filter(userId, keyword, "")
+    filter(userId, keyword, "1970-1-1", "2040-12-31")
   }else{
     //use JavaScript ISO Dates formate
     let monthNext = Number(month)+1

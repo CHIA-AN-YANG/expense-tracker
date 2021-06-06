@@ -2,14 +2,14 @@
   {{>message}}
 </div>
 <form class="form-inline my-2 my-lg-0" action="/records/filter" method="GET">
-  <div class="form-row mb-2">
+  <div class="form-row mb-2 ml-2">
     <select class="custom-select mr-sm-2" id="category" name="keyword">
       <option value="" selected>選分類</option>
       {{#each categoryMain}}
         <option value={{this.categoryId}}>{{this.name}}</option>
       {{/each}}
     </select>
-    <p class="light">選擇要查詢的月份</p>
+    <h6 class="light month-check">選擇想查詢的月份</h6>
     <select class="custom-select mr-sm-2" name="pickyear">
       <option value={{currentYear}} selected>{{currentYear}}</option>
       {{#each years}}

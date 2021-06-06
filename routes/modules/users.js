@@ -15,7 +15,6 @@ router.get('/register', (req, res) => {
 router.post('/register', (req, res) => {
   const errors = []
   const { name, email, password, confirmPassword } = req.body
-
   //check if user exists
   User.findOne({user_email: email}).then(user => { 
     if(user){ errors.push({message:'用戶已經存在，請登入。'}) }
@@ -46,12 +45,11 @@ router.post('/register', (req, res) => {
 }
 )})
 
-
-
 //login
 router.get('/login', (req, res) => {
   return res.render('login')
 })
+
 // 加入 middleware，驗證 request 登入狀態
 router.post('/login', passport.authenticate('local', {
   successRedirect: '/',
