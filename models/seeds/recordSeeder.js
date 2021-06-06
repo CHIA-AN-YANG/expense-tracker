@@ -14,21 +14,22 @@ const SEED_USER =  {
   }
 
 function promiseCreateRecord(num, id){ 
-    Category.findOne({ categoryId: num%4 })
-    .lean()
-    .then((doc) => {
-      let plusNow = Date.now()-15000000*num
-      return Record.create(
-        { userId: id,
-          name: `name-${num}`, 
-          amount: 500+num*123, 
-          date: plusNow, 
-          category: String(doc._id),
-          merchant: `merchant${(300+300*num).toString(36)}`
-        }
-        )
-    })
-    .catch( err => console.log(err))
+  Category.findOne({ categoryId: num%4 })
+  .lean()
+  .then((doc) => {
+    console.log(`create seed ${num}...`)
+    let plusNow = Date.now()-150000000*num
+    return Record.create(
+      { userId: id,
+        name: `name-${num}`, 
+        amount: 1000+num*3, 
+        date: plusNow, 
+        category: String(doc._id),
+        merchant: `merchant${num}`
+      }
+      )
+  })
+  .catch( err => console.log(err))
 }
 
 db.once('open', () => {
@@ -36,7 +37,7 @@ db.once('open', () => {
   User.findOne({user_name:SEED_USER.name})
   .then(user => {
     if(user){ return userId = user._id }
-    return bcrypt 
+    bcrypt 
       .genSalt(10)
       .then(salt => bcrypt.hash(SEED_USER.password, salt))
       .then(hash => User.create({
@@ -46,10 +47,15 @@ db.once('open', () => {
       }))
       .then(user => { 
         userId = user._id
-        console.log('new user created!')
+        console.log(`new user created! user id: ${userId}`)
       }).catch(err => console.log(err))     
   })
-  .then(() => Promise.all(Array.from({length:10}, (_, i) =>{promiseCreateRecord(i, userId)})))
+  .then(() => {
+    console.log('enter this section')
+    return Promise.any(
+     Array.from({length:10}, (_, i) => { promiseCreateRecord(i,userId)})
+    )
+  })
   .then(() => {
     console.log(`seed creation completed.`)
     process.exit()

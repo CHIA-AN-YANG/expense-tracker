@@ -16,7 +16,7 @@ const recordSchema = new mongoose.Schema({
   date: { 
     type: Date, 
     Default: Date.now(),
-    min: '2000-01-01'
+    // min: '1970-01-01'
   },
   category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
   merchant: { type: String }
