@@ -37,6 +37,14 @@
   "main": "app.js",
   "description": "",
   "devDependencies": {
-    "mongoose-lean-virtuals": "^0.8.0"
-  }
+    "mongoose-lean-virtuals": "^0.8.0",
+    "prettier": "2.3.2"
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "semi": false,
+    "singleQuote": true,
+    "editor.formatOnSave": true
+  }  
 }
