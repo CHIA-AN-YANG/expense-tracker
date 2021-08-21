@@ -6,6 +6,7 @@ const Category = require('./models/category')
 const app = express()
 const usePassport = require('./config/passport')
 const flash = require('connect-flash')
+const passport = require('passport')
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
@@ -26,7 +27,7 @@ app.use(
   })
 )
 
-//set view engine
+// View Engine
 app.engine(
   'hbs',
   exphbs({
@@ -36,10 +37,10 @@ app.engine(
 )
 app.set('view engine', 'hbs')
 
-// mongoose
+// Mongoose
 require('./config/mongoose')
 
-// set full scoped variable
+// Full scope variable
 app.locals.categoryMain = categoryArr
 
 //提供網頁訊息的 middleware
@@ -66,7 +67,7 @@ app.use(function (req, res, next) {
   next()
 })
 
-//passport + flash msg
+// Passport & Connect-flash
 usePassport(app)
 app.use(flash())
 app.use((req, res, next) => {
@@ -77,7 +78,7 @@ app.use((req, res, next) => {
   next()
 })
 
-//route setting
+//Route Setting
 const routes = require('./routes')
 app.use(routes)
 
