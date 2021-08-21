@@ -4,7 +4,7 @@ const Record = require('../../models/record')
 const Category = require('../../models/category')
 const flash = require('connect-flash')
 const moment = require('moment')
-const { currentYear, months, years } = require('/util')
+const { currentYear, months, years } = require('./util')
 
 // Create a new record
 router.get('/new', (_, res) => {
@@ -94,8 +94,8 @@ router.delete('/:id', (req, res) => {
 // Filter by Category and month
 router.get('/filter', (req, res) => {
   const keyword = req.query.keyword + ''
-  const year = req.query.pickyear
-  const month = req.query.pickmonth
+  const selectedYear = req.query.pickyear
+  const selectedMonth = req.query.pickmonth
   const userId = req.user._id
   const filter = function (id, cate, start, end) {
     let filteredData = []
@@ -122,9 +122,11 @@ router.get('/filter', (req, res) => {
         console.log(`filteredData: ${filteredData}`)
         return res.render('index', {
           records: filteredData,
-          currentYear,
-          months,
           years,
+          months,
+          currentYear,
+          selectedYear,
+          selectedMonth,
         })
       })
   }

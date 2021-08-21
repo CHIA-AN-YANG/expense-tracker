@@ -11,16 +11,24 @@
     </select>
     <h6 class="light month-check">選擇想查詢的月份</h6>
     <select class="custom-select mr-sm-2" name="pickyear">
+      {{#if selectedYear}}
+        <option value={{selectedYear}} selected>{{selectedYear}}</option>
+      {{else}}
       <option value={{currentYear}} selected>{{currentYear}}</option>
-      {{#each years}}
-        <option value={{this}}>{{this}}</option>
-      {{/each}}
+      {{/if}}
+        {{#each years}}
+          <option value={{this}}>{{this}}</option>
+        {{/each}}
     </select>
     <select class="custom-select mr-sm-2" name="pickmonth">
+      {{#if selectedMonth}}
+        <option value={{selectedMonth}} selected>{{selectedMonth}}</option>
+      {{else}}
       <option value="" selected>選月份</option>
-      {{#each months}}
-        <option value={{this}}>{{this}}</option>
-      {{/each}}
+      {{/if}}
+        {{#each months}}
+          <option value={{this}}>{{this}}</option>
+        {{/each}}
     </select>
    
     <button class="btn btn-outline-light ml-2 my-2 my-sm-0" type="submit">過濾項目</button>
