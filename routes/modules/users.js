@@ -42,7 +42,10 @@ router.post('/register', (req, res) => {
         req.flash('success_msg', '註冊成功！請登入以使用本服務。')
         res.redirect('/users/login')
       })
-      .catch((err) => console.log(err))
+      .catch((error) => {
+        req.flash('warning_msg', '註冊失敗。')
+        console.error(error)
+      })
   })
 })
 

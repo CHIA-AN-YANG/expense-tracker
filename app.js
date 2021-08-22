@@ -6,14 +6,12 @@ const Category = require('./models/category')
 const app = express()
 const usePassport = require('./config/passport')
 const flash = require('connect-flash')
-const passport = require('passport')
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
 const PORT = process.env.PORT
 require('./config/mongoose')
 app.use(express.static('public'))
-const { categoryArr } = require('./public/javascripts/util')
 
 //set middleware
 app.use(express.urlencoded({ extended: true }))
@@ -41,7 +39,20 @@ app.set('view engine', 'hbs')
 require('./config/mongoose')
 
 // Full scope variable
-app.locals.categoryMain = categoryArr
+async function getAsyncCategory() {
+  let categoryPromise = new Promise((resolve, reject) => {
+    Category.find({}, 'name categoryId')
+      .lean()
+      .then((categories) => {
+        if (categories) resolve(categories)
+        else {
+          resolve(console.error('category is null. Please check'))
+        }
+      })
+  })
+  app.locals.categoryMain = await categoryPromise
+}
+getAsyncCategory()
 
 //提供網頁訊息的 middleware
 app.use(function (req, res, next) {

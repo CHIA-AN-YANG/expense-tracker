@@ -5,21 +5,23 @@ const Category = require('../../models/category')
 const flash = require('connect-flash')
 const moment = require('moment')
 const { currentYear, months, years } = require('./util')
+const category = require('../../models/category')
 
 // Create a new record
 router.get('/new', (_, res) => {
   const dateSet = moment(new Date()).format('YYYY[-]MM[-]DD')
-  return Category.find()
+  return Category.find({}, 'name')
     .lean()
-    .then((docs) => {
-      res.render('new', { today: dateSet, category: docs })
+    .then((categories) => {
+      console.log(categories)
+      return res.render('new', { today: dateSet, category: categories })
     })
 })
-router.post('/', (_, res) => {
+router.post('/', (req, res) => {
   const userId = req.user._id
   let { name, date, categoryId, merchant, amount } = req.body
   categoryId = Number(categoryId)
-  return Category.findOne({ categoryId: categoryId }, function (_, category) {
+  return Category.findOne({ categoryId }, function (_, category) {
     let cateObjId = category._id
     Record.create({ userId, name, amount, date, merchant, category: cateObjId })
   })
@@ -97,64 +99,72 @@ router.get('/filter', (req, res) => {
   const selectedYear = req.query.pickyear
   const selectedMonth = req.query.pickmonth
   const userId = req.user._id
+
   const filter = function (id, cate, start, end) {
-    let filteredData = []
-    console.log(`finding record...start: ${start} end: ${end}`)
-    Record.find({ userId: id, date: { $gte: start, $lt: end } })
+    let selectedCategory = false
+    console.log('cate:', cate)
+    async function getAsyncCategory() {
+      let categoryPromise = new Promise((resolve, reject) => {
+        Category.findOne({ categoryId: cate })
+          .lean()
+          .then((category) => {
+            query = {
+              date: { $gte: start, $lt: end },
+              userId: id,
+              category: category._id,
+            }
+            return category
+          })
+          .then((category) => {
+            resolve(category)
+          })
+      })
+      selectedCategory = await categoryPromise
+    }
+    if (cate) getAsyncCategory()
+    else query = { date: { $gte: start, $lt: end }, userId: id }
+
+    Record.find(query)
+      .populate({ path: 'category' })
       .lean()
-      .populate('category')
-      .exec((error, categories) => {
+      .exec((error, records) => {
         if (error) {
           console.error(error, error.stack)
-          return res.send(error)
+          req.flash('error_msg', '無法過濾，有些東西壞掉了 Oops!')
+          return res.redirect('/')
         }
-        categories.forEach((category) => {
-          category.momentDate = moment(category.date).format('YYYY[-]MM[-]DD')
+        records.forEach((record) => {
+          record.momentDate = moment(record.date).format('YYYY[-]MM[-]DD')
         })
-        if (cate) {
-          filteredData = categories.filter((el) => {
-            return el.category.categoryId == Number(cate)
-          })
-        } else {
-          filteredData = categories
-        }
-
-        console.log(`filteredData: ${filteredData}`)
         return res.render('index', {
-          records: filteredData,
+          records,
           years,
           months,
           currentYear,
           selectedYear,
           selectedMonth,
+          selectedCategory,
         })
       })
   }
-  if (!(keyword || month)) {
+  if (!(keyword || selectedMonth)) {
     req.flash('error_msg', '類別與月份至少要選一個。')
   }
-  if (!month) {
+  if (!selectedMonth) {
     filter(userId, keyword, '1970-1-1', '2040-12-31')
   } else {
-    let monthNext = Number(month) + 1 //ISO Dates formate
-    let dstart = new Date(`${year}-${month > 9 ? month : '0' + month}-01`)
+    let monthNext = Number(selectedMonth) + 1 //ISO Dates formate
+    let dstart = new Date(
+      `${selectedYear}-${
+        selectedMonth > 9 ? selectedMonth : '0' + selectedMonth
+      }-01`
+    )
     let dtemp = new Date(
-      `${year}-${monthNext > 9 ? monthNext : '0' + monthNext}-01`
+      `${selectedYear}-${monthNext > 9 ? monthNext : '0' + monthNext}-01`
     )
     let dend = new Date(dtemp.setDate(dtemp.getDate() - 1))
     filter(userId, keyword, dstart, dend)
   }
-})
-
-//Delete all data in Records
-router.get('/destroy', (_, res) => {
-  return Record.deleteMany({}, () => {
-    console.log('All record documents have been removed.')
-    res.redirect('/')
-  }).catch((error) => {
-    console.error(error, error.stack)
-    return res.send(error)
-  })
 })
 
 module.exports = router
