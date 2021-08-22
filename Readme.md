@@ -1,6 +1,8 @@
+![expense-tracker](https://user-images.githubusercontent.com/71560280/130341980-b0863cc0-3e7f-4b22-b5c6-fa15c1424b0d.jpg)
 # expense-tracker
-
 Expense-tracker helps you record your expenses.
+
+---
 
 ## Installation
 This project has an online version deployed with heroku server: 
